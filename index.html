@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Navigation system</title>
+</head>
+<!--<meta charset="utf-8" />
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">-->
+   <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #right-panel {
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+
+      #right-panel select, #right-panel input {
+        font-size: 15px;
+      }
+
+      #right-panel select {
+        width: 100%;
+      }
+
+      #right-panel i {
+        font-size: 12px;
+      }
+      #right-panel {
+        height: 100%;
+        float: right;
+        width: 390px;
+        overflow: auto;
+      }
+      #map {
+        margin-right: 400px;
+      }
+      @media print {
+        #map {
+          height: 500px;
+          margin: 0;
+        }
+        #right-panel {
+          float: none;
+          width: auto;
+        }
+      }    
+    </style>
+</head>
+<body onload="loadFile()">
+
+<div id="right-panel">
+<form id="myForm" action="">
+  Lattitude: <input type="text" id="lat" name="fname" value="12.966251"><br>
+  Longitude: <input type="text" id="lon" name="lname" value="79.137521"><br>  
+</form> 
+
+<p>Click the "Submit" button to submit the latitude and longitude.</p>
+
+<button onclick="myFunction()" id="go">Submit</button>
+<p id="demo"></p>      
+</div>
+
+ <div id="map"></div>
+
+<script type="text/javascript" >
+var User_lat;
+var User_lon;
+var TT_slot;
+var OBS_slot;
+var Dist_TT;
+var Dist_OBS;
+var Dest_lat,Dest_lon;
+var TT_lat=12.970724;
+var TT_lon=79.160092;
+var OBS_lat=12.922310;
+var OBS_lon=79.131966;
+var flag=1;
+var reader=new XMLHttpRequest();
+var Origin_A,Destination_A;
+function myFunction() {
+    User_lat = Number(document.getElementById("lat").value);
+	User_lon = Number(document.getElementById("lon").value);
+    alert("Input submitted");
+	}
+
+function loadFile() {
+    reader.open('get', 'available.txt', true); 
+    reader.onreadystatechange = displayContents;
+    reader.send(null);	
+}
+
+function displayContents() {
+alert("ready at 102");
+for(var k=0;k <100; k++){}
+    if(reader.readyState==4) {
+       		TT_slot=reader.responseText[0];
+			OBS_slot=reader.responseText[1];
+			document.getElementById("demo").innerHTML=TT_slot+"<br>"+OBS_slot;
+		alert("file loaded");
+    }
+	/*else if(reader.readyState==0)
+	{ alert("request not intialized");}
+	else if(reader.readyState==1)
+	{ alert("server connection established");}
+	else if(reader.readyState==2)
+	{ alert("request received");}
+	else if(reader.readyState==3)
+	{ alert("processing request");}*/	
+	
+	
+}
+function initMap(){
+if (TT_slot==0 && OBS_slot==0)
+{
+flag=-1;
+alert("1 ready");
+show_map();
+}
+else if(TT_slot==0 && OBS_slot==1)
+{
+flag=1;
+Dest_lat=OBS_lat;
+Dest_lon=OBS_lon;
+alert("2 ready");
+show_map();
+}
+else if(TT_slot==1 && OBS_slot==0)
+{
+flag=1;
+Dest_lat=TT_lat;
+Dest_lon=TT_lon;
+alert("3 ready");
+show_map();
+}
+else{
+alert("4 ready");
+flag=1;
+var start=User_lat+","+User_lon;
+destinationA=TT_lat+","+TT_lon;
+destinationB=OBS_lat+","+OBS_lon;
+
+var service = new google.maps.DistanceMatrixService();
+service.getDistanceMatrix(
+  {
+    origins: [start],
+    destinations: [destinationA, destinationB],
+    travelMode: 'DRIVING'}, report);
+
+function report(response, status) {
+  if (status == 'OK') {
+    //var origins = response.originAddresses;
+    //var destinations = response.destinationAddresses;
+
+    //for (var i = 0; i < origins.length; i++) {
+      var results = response.rows[0].elements;
+        Dist_TT = Number(results[0].distance.value);
+		Dist_OBS=Number(results[1].distance.value);
+		document.getElementById("demo").innerHTML="Distance to TT: "+Dist_TT+" Distance to OBS: "+Dist_OBS;
+		alert("distance calculated"); 
+  
+if(Number(Dist_TT) > Number(Dist_OBS))
+{
+alert("OBS choosed");
+Dest_lat=OBS_lat;
+Dest_lon=OBS_lon;
+show_map();
+}
+else if(Number(Dist_TT) < Number(Dist_OBS))
+{
+alert("TT choosed");
+Dest_lat=TT_lat;
+Dest_lon=TT_lon;
+show_map();
+}
+else{
+flag=-1;
+alert("Errror in ur code");}  
+}
+}
+}
+function show_map(){
+if(flag==-1){
+alert("No space");}
+else {
+alert("Destination choosed");
+	var start=User_lat+","+User_lon;
+	var end=Dest_lat+","+Dest_lon;
+	
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var directionsService = new google.maps.DirectionsService;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 10,
+          center: {lat: 12.93, lng: 79.12}
+        });
+		calculateAndDisplayRoute(directionsService, directionsDisplay);
+        directionsDisplay.setMap(map);
+        directionsDisplay.setPanel(document.getElementById('right-panel'));        
+
+      function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+        directionsService.route({
+          origin: start,
+          destination: end,
+          travelMode: 'DRIVING'
+        }, function(response, status) {
+          if (status === 'OK') {
+            directionsDisplay.setDirections(response);
+          } else {
+            window.alert('Directions request failed due to ' + status);
+          }
+        });
+      }
+}
+}
+}
+
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+<script>
+var url = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAUoevmPug-V3btHPVB_HtbSnODcuICj9A&callback=initMap";
+$( "#go" ).click(function(){
+$.getScript( url, function() {
+console.log("File Loaded");
+});
+});
+</script>
+</body>
+</html>
