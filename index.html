@@ -89,7 +89,7 @@ var Origin_A,Destination_A;
 function myFunction() {
     User_lat = Number(document.getElementById("lat").value);
 	User_lon = Number(document.getElementById("lon").value);
-    alert("Input submitted");
+    //alert("Input submitted");
 	}
 
 function loadFile() {
@@ -99,13 +99,13 @@ function loadFile() {
 }
 
 function displayContents() {
-alert("ready at 102");
+alert("wait for 10 seconds and then press ok");
 for(var k=0;k <100; k++){}
     if(reader.readyState==4) {
        		TT_slot=reader.responseText[0];
 			OBS_slot=reader.responseText[1];
 			document.getElementById("demo").innerHTML=TT_slot+"<br>"+OBS_slot;
-		alert("file loaded");
+		//alert("file loaded");
     }
 	/*else if(reader.readyState==0)
 	{ alert("request not intialized");}
@@ -122,7 +122,7 @@ function initMap(){
 if (TT_slot==0 && OBS_slot==0)
 {
 flag=-1;
-alert("1 ready");
+//alert("1 ready");
 show_map();
 }
 else if(TT_slot==0 && OBS_slot==1)
@@ -130,7 +130,7 @@ else if(TT_slot==0 && OBS_slot==1)
 flag=1;
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
-alert("2 ready");
+//alert("2 ready");
 show_map();
 }
 else if(TT_slot==1 && OBS_slot==0)
@@ -138,11 +138,11 @@ else if(TT_slot==1 && OBS_slot==0)
 flag=1;
 Dest_lat=TT_lat;
 Dest_lon=TT_lon;
-alert("3 ready");
+//alert("3 ready");
 show_map();
 }
 else{
-alert("4 ready");
+//alert("4 ready");
 flag=1;
 var start=User_lat+","+User_lon;
 destinationA=TT_lat+","+TT_lon;
@@ -165,18 +165,18 @@ function report(response, status) {
         Dist_TT = Number(results[0].distance.value);
 		Dist_OBS=Number(results[1].distance.value);
 		document.getElementById("demo").innerHTML="Distance to TT: "+Dist_TT+" Distance to OBS: "+Dist_OBS;
-		alert("distance calculated"); 
+		//alert("distance calculated"); 
   
 if(Number(Dist_TT) > Number(Dist_OBS))
 {
-alert("OBS choosed");
+//alert("OBS choosed");
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 show_map();
 }
 else if(Number(Dist_TT) < Number(Dist_OBS))
 {
-alert("TT choosed");
+//alert("TT choosed");
 Dest_lat=TT_lat;
 Dest_lon=TT_lon;
 show_map();
@@ -189,7 +189,7 @@ alert("Errror in ur code");}
 }
 function show_map(){
 if(flag==-1){
-alert("No space");}
+alert(" currently NO SPACE avilable");}
 else {
 alert("Destination choosed");
 	var start=User_lat+","+User_lon;
