@@ -3,16 +3,11 @@
 <head>
 <title>Navigation system</title>
 </head>
-<!--<meta charset="utf-8" />
-<meta name="viewport" content="initial-scale=1.0, user-scalable=no">-->
    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
       #map {
         height: 100%;
       }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
+       html, body {
         height: 100%;
         margin: 0;
         padding: 0;
@@ -63,15 +58,16 @@
   Longitude: <input type="text" id="lon" name="lname" value="79.137521"><br>  
 </form> 
 
-<p>Click the "Submit" button to submit the latitude and longitude.</p>
+<p>Click the "Submit" button to submit your location.</p>
 
 <button onclick="myFunction()" id="go">Submit</button>
-<p id="demo"></p>      
+<p id="demo"><p>      
 </div>
 
  <div id="map"></div>
 
 <script type="text/javascript" >
+
 var User_lat;
 var User_lon;
 var TT_slot;
@@ -86,10 +82,12 @@ var OBS_lon=79.131966;
 var flag=1;
 var reader=new XMLHttpRequest();
 var Origin_A,Destination_A;
+
+
 function myFunction() {
     User_lat = Number(document.getElementById("lat").value);
 	User_lon = Number(document.getElementById("lon").value);
-    //alert("Input submitted");
+    console.log("Input submitted");
 	}
 
 function loadFile() {
@@ -99,30 +97,21 @@ function loadFile() {
 }
 
 function displayContents() {
-alert("wait for 10 seconds and then press ok");
-for(var k=0;k <100; k++){}
+for(var k=0;k <1000; k++){}
     if(reader.readyState==4) {
        		TT_slot=reader.responseText[0];
 			OBS_slot=reader.responseText[1];
-			document.getElementById("demo").innerHTML=TT_slot+"<br>"+OBS_slot;
-		//alert("file loaded");
+			var x="TT="+TT_slot+" OBS="+OBS_slot;
+		console.log(x);
     }
-	/*else if(reader.readyState==0)
-	{ alert("request not intialized");}
-	else if(reader.readyState==1)
-	{ alert("server connection established");}
-	else if(reader.readyState==2)
-	{ alert("request received");}
-	else if(reader.readyState==3)
-	{ alert("processing request");}*/	
-	
-	
 }
+
+
 function initMap(){
+
 if (TT_slot==0 && OBS_slot==0)
 {
 flag=-1;
-//alert("1 ready");
 show_map();
 }
 else if(TT_slot==0 && OBS_slot==1)
@@ -130,7 +119,7 @@ else if(TT_slot==0 && OBS_slot==1)
 flag=1;
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
-//alert("2 ready");
+document.getElementById('demo').innerHTML ="Nearest available parking location is Old Bus stand,Vellore";
 show_map();
 }
 else if(TT_slot==1 && OBS_slot==0)
@@ -138,11 +127,10 @@ else if(TT_slot==1 && OBS_slot==0)
 flag=1;
 Dest_lat=TT_lat;
 Dest_lon=TT_lon;
-//alert("3 ready");
+document.getElementById('demo').innerHTML ="Nearest available parking location is Technology Tower,VIT";
 show_map();
 }
 else{
-//alert("4 ready");
 flag=1;
 var start=User_lat+","+User_lon;
 destinationA=TT_lat+","+TT_lon;
@@ -157,41 +145,39 @@ service.getDistanceMatrix(
 
 function report(response, status) {
   if (status == 'OK') {
-    //var origins = response.originAddresses;
-    //var destinations = response.destinationAddresses;
 
-    //for (var i = 0; i < origins.length; i++) {
       var results = response.rows[0].elements;
         Dist_TT = Number(results[0].distance.value);
 		Dist_OBS=Number(results[1].distance.value);
-		document.getElementById("demo").innerHTML="Distance to TT: "+Dist_TT+" Distance to OBS: "+Dist_OBS;
-		//alert("distance calculated"); 
+		document.getElementById("demo").innerHTML="Distance to TT: "+Dist_TT+"m; Distance to OBS: "+Dist_OBS+"m;"; 
   
 if(Number(Dist_TT) > Number(Dist_OBS))
 {
-//alert("OBS choosed");
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
+document.getElementById('demo').innerHTML +="\nNearest available parking location is Old Bus stand,Vellore";
 show_map();
 }
 else if(Number(Dist_TT) < Number(Dist_OBS))
 {
-//alert("TT choosed");
 Dest_lat=TT_lat;
 Dest_lon=TT_lon;
+document.getElementById('demo').innerHTML +="\nNearest available parking location is Technology Tower,VIT";
 show_map();
 }
 else{
 flag=-1;
-alert("Errror in ur code");}  
+alert("Errror in calculating distance. Try again");}  
 }
 }
 }
+
+
 function show_map(){
 if(flag==-1){
-alert(" currently NO SPACE avilable");}
+document.getElementById('demo').innerHTML ="Sorry,Currently NO SPACE available";
+}
 else {
-alert("Destination choosed");
 	var start=User_lat+","+User_lon;
 	var end=Dest_lat+","+Dest_lon;
 	
