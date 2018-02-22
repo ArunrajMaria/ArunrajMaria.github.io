@@ -100,7 +100,7 @@ $(document).ready(function() {
 
 		function getUpdates() {
 
-			$.getJSON('http://api.thingspeak.com/channels/431927/feed/last.json?callback=?', function(data) {
+			$.getJSON('https://api.thingspeak.com/channels/431927/feed/last.json?callback=?', function(data) {
 			for(var k=0;k<1000;k++){}
 			TT_slot=Number(data.field1);
 			OBS_slot=Number(data.field2);
