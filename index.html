@@ -50,7 +50,7 @@
       }    
     </style>
 </head>
-<body onload="loadFile()">
+<body onload="read_file_from_thingspeak()">
 
 <div id="right-panel">
 <form id="myForm" action="">
@@ -65,7 +65,9 @@
 </div>
 
  <div id="map"></div>
-
+ 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ 
 <script type="text/javascript" >
 
 var User_lat;
@@ -89,25 +91,28 @@ function myFunction() {
 	User_lon = Number(document.getElementById("lon").value);
     console.log("Input submitted");
 	}
+function read_file_from_thingspeak(){	
+$(document).ready(function() {
+		getUpdates();
+		});
+}		
 
-function loadFile() {
-    reader.open('get', 'available.txt', true); 
-    reader.onreadystatechange = displayContents;
-    reader.send(null);	
-}
 
-function displayContents() {
-for(var k=0;k <1000; k++){}
-    if(reader.readyState==4) {
-       		TT_slot=reader.responseText[0];
-			OBS_slot=reader.responseText[1];
+		function getUpdates() {
+
+			$.getJSON('http://api.thingspeak.com/channels/431927/feed/last.json?callback=?', function(data) {
+			for(var k=0;k<1000;k++){}
+			TT_slot=Number(data.field1);
+			OBS_slot=Number(data.field2);
 			var x="TT="+TT_slot+" OBS="+OBS_slot;
 		console.log(x);
-    }
-}
-
+			});
+		}	
 
 function initMap(){
+
+console.log("Intializing map");
+		
 
 if (TT_slot==0 && OBS_slot==0)
 {
@@ -130,7 +135,7 @@ Dest_lon=TT_lon;
 document.getElementById('demo').innerHTML ="Nearest available parking location is Technology Tower,VIT";
 show_map();
 }
-else{
+else if(TT_slot==1 && OBS_slot==1){
 flag=1;
 var start=User_lat+","+User_lon;
 destinationA=TT_lat+","+TT_lon;
@@ -165,17 +170,21 @@ Dest_lon=TT_lon;
 document.getElementById('demo').innerHTML +="\nNearest available parking location is Technology Tower,VIT";
 show_map();
 }
-else{
+else
+{
 flag=-1;
 alert("Errror in calculating distance. Try again");}  
 }
 }
 }
+}
+
 
 
 function show_map(){
 if(flag==-1){
 document.getElementById('demo').innerHTML ="Sorry,Currently NO SPACE available";
+console.log("Sorry,Currently NO SPACE available");
 }
 else {
 	var start=User_lat+","+User_lon;
@@ -206,10 +215,9 @@ else {
       }
 }
 }
-}
 
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> 
+ 
 <script>
 var url = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAUoevmPug-V3btHPVB_HtbSnODcuICj9A&callback=initMap";
 $( "#go" ).click(function(){
