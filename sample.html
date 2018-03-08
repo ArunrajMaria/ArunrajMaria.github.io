@@ -315,22 +315,26 @@ console.log("mapping starts");
 
 function Book_TT()
 {
+
+$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_TT, function(data_6) {});
+console.log('TT booked');
+
 var ref='Your booking id is ';
 	ref+=Math.floor(Math.random() * 1000) + 1;
 	ref+=' and you should arrive parking area within '+Duration_TT+' minutes';
 	alert(ref);
-$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_TT, function(data_6) {});
-console.log('TT booked');
 }
 
 function Book_OBS()
 {
+
+$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS, function(data_6) {});
+console.log('OBS booked');
+
 var ref='Your booking id is ';
 	ref+=Math.floor(Math.random() * 1000) + 1;
 	ref+=' and you should arrive parking area within '+Duration_OBS+' minutes';
 	alert(ref);
-$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS, function(data_6) {});
-console.log('OBS booked');
 }
 		
     </script>
