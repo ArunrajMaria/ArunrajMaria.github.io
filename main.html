@@ -8,6 +8,7 @@
    <style>
       #map {
         height: 100%;
+		display:none;
       }
        html, body {
         height: 100%;
@@ -32,7 +33,7 @@
         font-size: 12px;
       }
       #right-panel {
-        height: 100%;
+	    height: 100%;
         float: right;
         width: 390px;
         overflow: auto;
@@ -49,9 +50,37 @@
           float: none;
           width: auto;
         }
-      }    
+      }
+#loader {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}	  
     </style>
 <body>
+
+<div id="loader"></div>
 
 <div id="right-panel">
 
@@ -195,13 +224,15 @@ setTimeout(check_condition,5000);
 function check_condition(){
 
 if(KPD_lock==1 && OBS_lock==1){
-alert("Both were booked...NO SPACE available");
+  document.getElementById("loader").style.display = "none";
+alert("NO SPACE available");
 }
 		
 else if(KPD_lock==0 && OBS_lock==0){
 if (KPD_slot==0 && OBS_slot==0)
 {
-alert("No spaces available");
+  document.getElementById("loader").style.display = "none";
+alert("NO SPACE available");
 }
 else if(KPD_slot==0 && OBS_slot==1)
 {
@@ -261,7 +292,8 @@ show_map();
 setTimeout(Book_OBS,5000);
 }
 else if(OBS_slot==0){
-alert("No spaces");
+  document.getElementById("loader").style.display = "none";
+alert("NO SPACE");
 }
 }
 
@@ -276,7 +308,8 @@ setTimeout(Book_KPD,5000);
 }
 else if(KPD_slot==0)
 {
-alert("No spaces");
+  document.getElementById("loader").style.display = "none";
+alert("NO SPACE");
 }
 }
 }
@@ -284,6 +317,8 @@ alert("No spaces");
 
 function show_map()
 {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("map").style.display = "block";
 console.log("mapping starts");
 	var start=User_lat+","+User_lon;
 	var end=Dest_lat+","+Dest_lon;
