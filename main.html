@@ -243,7 +243,6 @@ Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Old Bus stand,Vellore";
 Book_OBS();
-setTimeout(show_map,5000);
 }
 else if(KPD_slot==1 && OBS_slot==0)
 {
@@ -252,7 +251,6 @@ Dest_lat=KPD_lat;
 Dest_lon=KPD_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Katpadi junction";
 Book_KPD();
-setTimeout(show_map,5000);
 }
 else if(KPD_slot==1 && OBS_slot==1){ 
   
@@ -262,7 +260,6 @@ Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Old Bus stand,Vellore";
 Book_OBS();
-setTimeout(show_map,5000);
 }
 else if(Number(Dist_KPD) < Number(Dist_OBS))
 {
@@ -270,7 +267,6 @@ Dest_lat=KPD_lat;
 Dest_lon=KPD_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Katpadi junction";
 Book_KPD();
-setTimeout(show_map,5000);
 }
 else
 {
@@ -291,7 +287,6 @@ Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Old Bus stand,Vellore";
 Book_OBS();
-setTimeout(show_map,5000);
 }
 else if(OBS_slot==0){
   document.getElementById("loader").style.display = "none";
@@ -306,7 +301,6 @@ Dest_lat=KPD_lat;
 Dest_lon=KPD_lon;
 document.getElementById('demo').innerHTML ="Nearest available parking location is Katpadi junction";
 Book_KPD();
-setTimeout(show_map,5000);
 }
 else if(KPD_slot==0)
 {
@@ -367,6 +361,7 @@ console.log("Waiting for TS KPD");
 }
 else if(temp!=0)
 {
+show_map();
 	var d = new Date();
 d.setMinutes(d.getMinutes() + Duration_KPD);
 
@@ -396,6 +391,7 @@ console.log("Waiting for TS OBS");
 }
 else if(temp!=0)
 {
+show_map();
 var d = new Date();
 d.setMinutes(d.getMinutes() + Duration_OBS);
 
