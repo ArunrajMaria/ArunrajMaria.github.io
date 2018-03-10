@@ -138,10 +138,10 @@ var Origin_A,Destination_A;
 				}
 				}	
 	});
-	setTimeout(check,5000);
+	setTimeout(check_location,5000);
 }
 
-function check()
+function check_location()
 {
 if (location_flag == -1)
 {
@@ -153,7 +153,7 @@ else if(location_flag == 1)
 console.log("Geocoded successfully");
 if(city_name=='Vellore'){
 console.log("You are within vellore");
-setTimeout(getUpdates,500);
+distance_calculation();
 }
 else if(city_name !='Vellore'){
 console.log("You are out of vellore");
@@ -168,35 +168,34 @@ var k=0;
 			KPD_slot=Number(data_2.field1);
 			k+=1;
 			if(k ==4){console.log("status loaded");
-			setTimeout(distance_calculation,1000);}
+			check_condition();}
 			//console.log('KPD_slot');
 			});
 			$.getJSON('https://api.thingspeak.com/channels/431927/fields/2/last.json', function(data_3) {
 			OBS_slot=Number(data_3.field2);
 			k+=1;
 			if(k ==4){console.log("status loaded");
-			setTimeout(distance_calculation,1000);}
+			check_condition();}
 			//console.log('OBS_slot');
 			});
 			$.getJSON('https://api.thingspeak.com/channels/431927/fields/3/last.json', function(data_4) {
 			KPD_lock=Number(data_4.field3);
 			k+=1;
 			if(k ==4){console.log("status loaded");
-			setTimeout(distance_calculation,1000);}
+			check_condition();}
 			//console.log('KPD_lock');
 			});
 			$.getJSON('https://api.thingspeak.com/channels/431927/fields/5/last.json?callback=?', function(data_5) {
 			OBS_lock=Number(data_5.field5);
 			k+=1;
 			if(k ==4){console.log("status loaded");
-			setTimeout(distance_calculation,1000);}
+			check_condition();}
 			//console.log('OBS_lock');
 			});
 						
 		}
 function distance_calculation(){	
-			var x="KPD_slot="+KPD_slot+" OBS_slot="+OBS_slot+" KPD_lock="+KPD_lock+" OBS_lock="+OBS_lock;
-		console.log(x);
+
 var start=User_lat+","+User_lon;
 destinationA=KPD_lat+","+KPD_lon;
 destinationB=OBS_lat+","+OBS_lon;
@@ -216,12 +215,15 @@ function report(response, status) {
 		Duration_KPD=Math.ceil((Number(results[0].duration.value))/60);
 		Dist_OBS=Number(results[1].distance.value);
 		Duration_OBS=Math.ceil((Number(results[1].duration.value))/60);
-		console.log("Distance to KPD: "+Dist_KPD+"m; Distance to OBS: "+Dist_OBS+"m;");}}
+		console.log("Distance to KPD: "+Dist_KPD+"m; Distance to OBS: "+Dist_OBS+"m;");
+		getUpdates();
+		}}
 
-setTimeout(check_condition,5000);
 }
 
 function check_condition(){
+			var x="KPD_slot="+KPD_slot+" OBS_slot="+OBS_slot+" KPD_lock="+KPD_lock+" OBS_lock="+OBS_lock;
+		console.log(x);
 
 if(KPD_lock==1 && OBS_lock==1){
   document.getElementById("loader").style.display = "none";
@@ -240,8 +242,8 @@ else if(KPD_slot==0 && OBS_slot==1)
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Old Bus stand,Vellore";
-show_map();
-setTimeout(Book_OBS,5000);
+Book_OBS();
+setTimeout(show_map,5000);
 }
 else if(KPD_slot==1 && OBS_slot==0)
 {
@@ -249,8 +251,8 @@ else if(KPD_slot==1 && OBS_slot==0)
 Dest_lat=KPD_lat;
 Dest_lon=KPD_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Katpadi junction";
-show_map();
-setTimeout(Book_KPD,5000);
+Book_KPD();
+setTimeout(show_map,5000);
 }
 else if(KPD_slot==1 && OBS_slot==1){ 
   
@@ -259,16 +261,16 @@ if(Number(Dist_KPD) > Number(Dist_OBS))
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Old Bus stand,Vellore";
-show_map();
-setTimeout(Book_OBS,5000);
+Book_OBS();
+setTimeout(show_map,5000);
 }
 else if(Number(Dist_KPD) < Number(Dist_OBS))
 {
 Dest_lat=KPD_lat;
 Dest_lon=KPD_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Katpadi junction";
-show_map();
-setTimeout(Book_KPD,5000);
+Book_KPD();
+setTimeout(show_map,5000);
 }
 else
 {
@@ -288,8 +290,8 @@ if(OBS_slot==1){
 Dest_lat=OBS_lat;
 Dest_lon=OBS_lon;
 document.getElementById('demo').innerHTML ="\nNearest available parking location is Old Bus stand,Vellore";
-show_map();
-setTimeout(Book_OBS,5000);
+Book_OBS();
+setTimeout(show_map,5000);
 }
 else if(OBS_slot==0){
   document.getElementById("loader").style.display = "none";
@@ -303,8 +305,8 @@ if (KPD_slot==1){
 Dest_lat=KPD_lat;
 Dest_lon=KPD_lon;
 document.getElementById('demo').innerHTML ="Nearest available parking location is Katpadi junction";
-show_map();
-setTimeout(Book_KPD,5000);
+Book_KPD();
+setTimeout(show_map,5000);
 }
 else if(KPD_slot==0)
 {
@@ -350,9 +352,21 @@ console.log("mapping starts");
 
 function Book_KPD()
 {
+$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_KPD, function(data_6) {
+temp=data_6;
+TS_condition_KPD();
+});
 
-$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_KPD, function(data_6) {});
-console.log('KPD booked');
+}
+
+function TS_condition_KPD(){
+if(temp == 0)
+{
+console.log("Waiting for TS KPD");
+ setTimeout(Book_KPD,2000);
+}
+else if(temp!=0)
+{
 	var d = new Date();
 d.setMinutes(d.getMinutes() + Duration_KPD);
 
@@ -361,14 +375,27 @@ var ref='Your booking id is ';
 
 	ref+=' and you should arrive parking area before '+d;
 	alert(ref);
+console.log('KPD booked');
+}
 }
 
 function Book_OBS()
 {
+$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS, function(data_6) {
+temp=data_6;
+TS_condition_OBS();
+});
 
-$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS, function(data_6) {});
-console.log('OBS booked');
+}
 
+function TS_condition_OBS(){
+if(temp == 0)
+{
+console.log("Waiting for TS OBS");
+ setTimeout(Book_OBS,2000);
+}
+else if(temp!=0)
+{
 var d = new Date();
 d.setMinutes(d.getMinutes() + Duration_OBS);
 
@@ -376,8 +403,9 @@ var ref='Your booking id is ';
 	ref+=Math.floor(Math.random() * 1000) + 1;
 	ref+=' and you should arrive parking area before '+d;
 	alert(ref);
+console.log('OBS booked');
 }
-		
+}		
     </script>
 </body>
 </html>
