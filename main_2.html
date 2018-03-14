@@ -343,7 +343,8 @@
 
 	function Book_KPD()
 	{
-		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_KPD, function(data_6) {
+		booking_id=Math.floor(Math.random() * 1000) + 1;
+		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_KPD+'&field7='+booking_id, function(data_6) {
 		temp=data_6;
 		TS_condition_KPD();
 		});
@@ -354,7 +355,7 @@
 		if(temp == 0)
 		{
 			console.log("Waiting for TS KPD");
-			setTimeout(Book_KPD,2000);
+			setTimeout(getUpdates,3000);
 		}
 		else if(temp!=0)
 		{
@@ -362,7 +363,7 @@
 			var d = new Date();
 			d.setMinutes(d.getMinutes() + Duration_KPD);
 			var ref='Your booking id is ';
-			ref+=Math.floor(Math.random() * 1000) + 1;
+			ref+=booking_id;
 			ref+=' and you should arrive parking area before '+d;
 			alert(ref);
 			console.log('KPD booked');
@@ -371,7 +372,8 @@
 
 	function Book_OBS()
 	{
-		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS, function(data_6) {
+		booking_id=Math.floor(Math.random() * 1000) + 1;
+		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS+'&field7='+booking_id, function(data_6) {
 		temp=data_6;
 		TS_condition_OBS();
 		});
@@ -382,7 +384,7 @@
 		if(temp == 0)
 		{
 			console.log("Waiting for TS OBS");
-			setTimeout(Book_OBS,2000);
+			setTimeout(getUpdates,3000);
 		}
 		else if(temp!=0)
 		{
@@ -390,7 +392,7 @@
 			var d = new Date();
 			d.setMinutes(d.getMinutes() + Duration_OBS);
 			var ref='Your booking id is ';
-			ref+=Math.floor(Math.random() * 1000) + 1;
+			ref+=booking_id;
 			ref+=' and you should arrive parking area before '+d;
 			alert(ref);
 			console.log('OBS booked');
