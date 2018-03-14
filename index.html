@@ -1,6 +1,5 @@
 ﻿<!DOCTYPE html>
 <html>
-
 <title>Home</title>
 <style>
 .footer {
@@ -15,45 +14,43 @@
 </style>
 
  
-<body style="background-color:#efefea;">
+<body style="background-color:#efefea;" onload="startTime()">
 
-<marquee direction="left"> <h1 style= "color:#f20420;" style="background color:green;" "border:4px green;" > WELCOME TO SMART CAR PARKING SITE</h1></marquee>
-<hr size="5">
-<h2 align="center"> <font color="#0703f1" style="font-family:verdana;" >SAVE YOUR ENERGY! SAVE YOUR TIME!</font></h2>
-<img src="car.png" alt="car"  align="right" style="width:400px;height:250px;" >
+	<marquee direction="left"> <h1 style= "color:#f20420;" style="background color:green;" "border:4px green;" > WELCOME TO SMART CAR PARKING SITE</h1></marquee>
+	<hr size="5">
+	<h2 align="center"> <font color="#0703f1" style="font-family:verdana;" >SAVE YOUR ENERGY! SAVE YOUR TIME!</font></h2>
+	<img src="car.png" alt="car"  align="right" style="width:400px;height:250px;" >
+	<div id="time"></div>
+	<h3>Click on below link to book available nearest parking slot</h3>
+	<a href="main.html" target="_blank"><font size="5">Book Now!</font></a>
+	<div class="footer">
+		<p>Developed by  V Maria Arunraj and K Sakthivel</p>
+	</div>
+</body>
+
 <script type="text/javascript">
-function startTime()
-{
-var today=new Date();
-var h=today.getHours();
-var m=today.getMinutes();
-var s=today.getSeconds();
-// add a zero in front of numbers<10
-m=checkTime(m);
-s=checkTime(s);
-document.getElementById('txt').innerHTML="Current time is:";
-document.getElementById('txt').innerHTML+=h+":"+m+":"+s;
-t=setTimeout('startTime()',500);
-}
-function checkTime(i)
-{
-if (i<10)
-{
-i="0" + i;
-}
-return i;
-}
+	function startTime()
+		{
+		var today=new Date();
+		var h=today.getHours();
+		var m=today.getMinutes();
+		var s=today.getSeconds();
+		m=checkTime(m);
+		s=checkTime(s);
+		document.getElementById('time').innerHTML="Current time is:";
+		document.getElementById('time').innerHTML+=h+":"+m+":"+s;
+		t=setTimeout('startTime()',500);
+		}
+		
+	function checkTime(i)
+		{
+		if (i<10)
+			{
+			i="0" + i;
+			}
+		return i;
+		}
 </script>
-</head>
-<body onload="startTime()">
-<div id="txt"></div>
 
-<h3>Click on below link to book available nearest parking slot</h3>
-<a href="main.html" target="_blank"><font size="5">Book Now!</font></a>
-</div>
-<div class="footer">
-  <p>Smart parking site &#9400 2018</p>
-</div>
-</body>
-</body>
+
 </html>
