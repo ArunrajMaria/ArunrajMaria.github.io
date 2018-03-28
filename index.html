@@ -21,14 +21,24 @@
 	<h2 align="center"> <font color="#0703f1" style="font-family:verdana;" >SAVE YOUR ENERGY! SAVE YOUR TIME!</font></h2>
 	<img src="car.png" alt="car"  align="right" style="width:400px;height:250px;" >
 	<div id="time"></div>
-	<h3>Click on below link to book available nearest parking slot</h3>
-	<a href="main_2.html" target="_blank"><font size="5">Book Now!</font></a>
+	<h3>Enter your mobile number and SUBMIT and click on Book now</h3>
+	<form action="main_2.html" target="_blank">
+		Mobile number:<br>
+		<input type="text" name="mobile_number" value="9566822774" id="number">
+		<input type="submit" value="submit" onclick="get_no()">
+	</form>
+	
+	<!--<a href="main_2.html" target="_blank"><font size="5">Book Now!</font></a>-->
 	<div class="footer">
 		<p>Developed by  V Maria Arunraj and K Sakthivel</p>
 	</div>
 </body>
 
 <script type="text/javascript">
+	function get_no(){
+	localStorage.mob_no=document.getElementById("number").value;
+	console.log(localStorage.mob_no);	
+	}
 	function startTime()
 		{
 		var today=new Date();

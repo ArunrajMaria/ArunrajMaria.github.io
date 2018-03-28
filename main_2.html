@@ -110,6 +110,8 @@
 	var OBS_lon=79.131966;
 	var Origin_A,Destination_A;
 	var booking_id;
+	var sms_api_key='rcWdReL0vbTtVy3kFZAuJ7Qsg5BjpxOqaNPf8ozMDXKG9SUwimpRwZ59TOuYWGg8JDk4ExHIaPqm0Cho';
+	var mobile_no=localStorage.mob_no;
 	function startfn()
 	{
 		if (navigator.geolocation) 
@@ -343,8 +345,7 @@
 
 	function Book_KPD()
 	{
-		booking_id=Math.floor(Math.random() * 1000) + 1;
-		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_KPD+'&field7='+booking_id, function(data_6) {
+		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field3=1&field4='+Duration_KPD, function(data_6) {
 		temp=data_6;
 		TS_condition_KPD();
 		});
@@ -359,12 +360,14 @@
 		}
 		else if(temp!=0)
 		{
+			booking_id=Math.floor(Math.random() * 1000) + 1;
 			show_map();
 			var d = new Date();
 			d.setMinutes(d.getMinutes() + Duration_KPD);
 			var ref='Your booking id is ';
 			ref+=booking_id;
 			ref+=' and you should arrive parking area before '+d;
+			$.getJSON('https://api.thingspeak.com/update.json?api_key=USU56NSUXV9NYJMZ&field1='+booking_id+'&field2='+mobile_no, function(data_7) {});
 			alert(ref);
 			console.log('KPD booked');
 		}
@@ -372,8 +375,7 @@
 
 	function Book_OBS()
 	{
-		booking_id=Math.floor(Math.random() * 1000) + 1;
-		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS+'&field7='+booking_id, function(data_6) {
+		$.getJSON('https://api.thingspeak.com/update.json?api_key=826FDB8WEJMG9LC3&field5=1&field6='+Duration_OBS, function(data_6) {
 		temp=data_6;
 		TS_condition_OBS();
 		});
@@ -388,16 +390,19 @@
 		}
 		else if(temp!=0)
 		{
+			booking_id=Math.floor(Math.random() * 1000) + 1;
 			show_map();
 			var d = new Date();
 			d.setMinutes(d.getMinutes() + Duration_OBS);
 			var ref='Your booking id is ';
 			ref+=booking_id;
 			ref+=' and you should arrive parking area before '+d;
+			$.getJSON('https://api.thingspeak.com/update.json?api_key=USU56NSUXV9NYJMZ&field3='+booking_id+'&field4='+mobile_no, function(data_7) {});
 			alert(ref);
 			console.log('OBS booked');
 		}
-	}		
+	}
+
 </script>
 </body>
 </html>
